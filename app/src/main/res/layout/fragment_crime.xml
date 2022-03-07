@@ -71,6 +71,15 @@
         app:layout_constraintEnd_toStartOf="@id/endLine"
         app:layout_constraintTop_toBottomOf="@id/detailsTextView"/>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/crimeTimeButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/crime_time_button"
+        app:layout_constraintTop_toBottomOf="@id/crimeDate"
+        app:layout_constraintStart_toEndOf="@id/startLine"
+        app:layout_constraintEnd_toStartOf="@id/endLine"/>
+
     <androidx.appcompat.widget.AppCompatCheckBox
         style="?android:listSeparatorTextViewStyle"
         android:id="@+id/crime_solved"
@@ -79,6 +88,6 @@
         android:text="@string/crime_solved_label"
         app:layout_constraintStart_toEndOf="@id/startLine"
         app:layout_constraintEnd_toStartOf="@id/endLine"
-        app:layout_constraintTop_toBottomOf="@id/crimeDate"/>
+        app:layout_constraintTop_toBottomOf="@id/crimeTimeButton"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

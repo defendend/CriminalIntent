@@ -9,20 +9,21 @@ import java.util.*
 
 private const val ARG_DATE = "date"
 
-class DatePickerFragment :DialogFragment() {
+class DatePickerFragment : DialogFragment() {
 
     interface Callbacks {
         fun onDateSelected(date: Date)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dateListener = DatePickerDialog.OnDateSetListener { _: DatePicker, year: Int, month: Int, day: Int ->
-            val resultDate : Date =GregorianCalendar(year, month, day).time
+        val dateListener =
+            DatePickerDialog.OnDateSetListener { _: DatePicker, year: Int, month: Int, day: Int ->
+                val resultDate: Date = GregorianCalendar(year, month, day).time
 
-            targetFragment?.let { fragment ->
-                (fragment as Callbacks).onDateSelected(resultDate)
+                targetFragment?.let { fragment ->
+                    (fragment as Callbacks).onDateSelected(resultDate)
+                }
             }
-        }
         val date = arguments?.getSerializable(ARG_DATE) as Date
         val calendar = Calendar.getInstance()
         calendar.time = date
