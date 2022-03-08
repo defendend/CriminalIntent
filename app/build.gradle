@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.defendend.criminalintent"
-        minSdk 28
+        minSdk 24
         targetSdk 31
         versionCode 1
         versionName "1.0"

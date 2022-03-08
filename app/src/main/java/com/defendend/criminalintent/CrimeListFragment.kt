@@ -3,9 +3,7 @@ package com.defendend.criminalintent
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -40,6 +38,7 @@ class CrimeListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -77,14 +76,32 @@ class CrimeListFragment : Fragment() {
         callbacks = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_crime_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.newCrime -> {
+                val crime = Crime()
+                crimeListViewModel.addCrime(crime)
+                callbacks?.onCrimeSelected(crime.id)
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun updateUI(crimes: List<Crime>) {
         adapter = CrimeAdapter(crimes)
         crimeRecyclerView.adapter = adapter
     }
 
-    private inner class CrimeHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    private inner class CrimeHolder(view: View) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
 
-        private  lateinit var crime: Crime
+        private lateinit var crime: Crime
         private val titleTextView: TextView = itemView.findViewById(R.id.crimeTitle)
         private val dateTextView: TextView = itemView.findViewById(R.id.crimeDate)
         private val solvedImageView: ImageView = itemView.findViewById(R.id.imageView)
@@ -98,9 +115,9 @@ class CrimeListFragment : Fragment() {
             titleTextView.text = this.crime.title
             val dateFormat: DateFormat = SimpleDateFormat("EEEE , MMM dd, yyyy")
             dateTextView.text = dateFormat.format(crime.date)
-            solvedImageView.visibility = if (crime.isSolved){
+            solvedImageView.visibility = if (crime.isSolved) {
                 View.VISIBLE
-            }else {
+            } else {
                 View.GONE
             }
         }
@@ -109,7 +126,9 @@ class CrimeListFragment : Fragment() {
             callbacks?.onCrimeSelected(crime.id)
         }
     }
-    private inner class CrimeAdapter(var crimes: List<Crime>) : ListAdapter<Crime, CrimeHolder>(DiffCallback())  {
+
+    private inner class CrimeAdapter(var crimes: List<Crime>) :
+        ListAdapter<Crime, CrimeHolder>(DiffCallback()) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
 
@@ -132,7 +151,7 @@ class CrimeListFragment : Fragment() {
 
     }
 
-    private inner class DiffCallback: DiffUtil.ItemCallback<Crime>() {
+    private inner class DiffCallback : DiffUtil.ItemCallback<Crime>() {
 
         override fun areItemsTheSame(oldItem: Crime, newItem: Crime): Boolean {
             if (oldItem != newItem) return false

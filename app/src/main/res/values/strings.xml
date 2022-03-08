@@ -11,4 +11,5 @@
     <string name="item_title">Crime title</string>
     <string name="item_date">Crime date</string>
     <string name="item_police_button">Requires Police</string>
+    <string name="new_crime">New Crime</string>
 </resources>
