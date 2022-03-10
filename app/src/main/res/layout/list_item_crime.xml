@@ -28,10 +28,13 @@
 
     <TextView
         android:id="@+id/crimeTitle"
-        style="?android:listSeparatorTextViewStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
         android:text="@string/item_title"
+        android:paddingStart="@dimen/small_space"
         app:layout_constraintStart_toEndOf="@id/startLine"
         app:layout_constraintTop_toBottomOf="@id/topLine"
         app:layout_constraintEnd_toStartOf="@id/imageView"/>

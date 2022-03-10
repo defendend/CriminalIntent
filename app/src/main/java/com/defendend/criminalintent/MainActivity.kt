@@ -1,8 +1,12 @@
 package com.defendend.criminalintent
 
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.app.ActivityCompat
 import java.util.*
+
+private const val REQUEST_CALL = 1
 
 class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +23,8 @@ class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks {
                 .add(R.id.fragmentContainer, fragment)
                 .commit()
         }
+
+        checkPermission()
     }
 
     override fun onCrimeSelected(crimeId: UUID) {
@@ -29,4 +35,17 @@ class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks {
             .addToBackStack(null)
             .commit()
     }
+
+    private fun checkPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.READ_CONTACTS
+            ) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                arrayOf(android.Manifest.permission.READ_CONTACTS),
+                REQUEST_CALL
+            )
+        }
+    }
+
 }

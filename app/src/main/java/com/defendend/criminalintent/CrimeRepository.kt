@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.defendend.criminalintent.database.CrimeDatabase
+import com.defendend.criminalintent.database.migration_1_2
+import com.defendend.criminalintent.database.migration_2_3
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -15,7 +17,8 @@ class CrimeRepository private constructor(context: Context) {
         context.applicationContext,
         CrimeDatabase::class.java,
         DATABASE_NAME
-    ).build()
+    ).addMigrations(migration_1_2, migration_2_3)
+        .build()
 
     private val crimeDao = dataBase.crimeDao()
     private val executor = Executors.newSingleThreadExecutor()
@@ -40,14 +43,13 @@ class CrimeRepository private constructor(context: Context) {
         private var INSTANCE: CrimeRepository? = null
 
         fun initialize(context: Context) {
-            if (INSTANCE == null){
+            if (INSTANCE == null) {
                 INSTANCE = CrimeRepository(context)
             }
         }
 
         fun get(): CrimeRepository {
-            return INSTANCE ?:
-            throw IllegalStateException("Crime repository must be initialized")
+            return INSTANCE ?: throw IllegalStateException("Crime repository must be initialized")
         }
     }
 }
