@@ -16,9 +16,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import androidx.core.database.getStringOrNull
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import java.lang.Exception
 import java.util.*
 
 private const val ARG_CRIME_ID = "crime_id"
@@ -27,6 +27,7 @@ private const val DIALOG_TIME = "DialogTime"
 private const val REQUEST_DATE = 0
 private const val REQUEST_TIME = 1
 private const val REQUEST_CONTACT = 2
+private const val REQUEST_PHONE = 3
 private const val DATE_FORMAT = "EEE, MMM, dd"
 
 class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
@@ -147,7 +148,8 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         }
 
         suspectButton.apply {
-            val pickContactIntent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+            val pickContactIntent =
+                Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI)
 
             setOnClickListener {
                 startActivityForResult(pickContactIntent, REQUEST_CONTACT)
@@ -163,7 +165,24 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
 
         callSuspect.apply {
 
-            ContactsContract.Contacts._ID
+            val pickPhoneIntent =
+                Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI)
+
+            setOnClickListener {
+                if (crime.suspectPhone == "") {
+                    startActivityForResult(pickPhoneIntent, REQUEST_PHONE)
+                } else {
+                    val dialNumber = Intent(Intent.ACTION_DIAL)
+                    dialNumber.data = Uri.parse("tel:${crime.suspectPhone}")
+                    startActivity(dialNumber)
+                }
+            }
+
+            val packageManager: PackageManager = requireActivity().packageManager
+            val resolvedActivity: ResolveInfo? =
+                packageManager.resolveActivity(pickPhoneIntent, PackageManager.MATCH_DEFAULT_ONLY)
+            if (resolvedActivity == null)
+                isEnabled = false
 
         }
 
@@ -174,27 +193,78 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
             resultCode != Activity.RESULT_OK -> return
 
             requestCode == REQUEST_CONTACT && data != null -> {
-                val contactUri: Uri? = data.data
+
+                val contactUri: Uri = data.data ?: return
                 // указатель для каких полей наш запрос должен возвращать значения
                 // Выполняемый здесь запрос = contactUri похож на предложение "where"
-                val cursor = contactUri?.let {
+                val queryField = ContactsContract.CommonDataKinds.Phone._ID
+
+                val cursor = contactUri.let {
                     requireActivity().contentResolver
-                        .query(it, null, null, null, null)
+                        .query(
+                            it,
+                            null,
+                            queryField,
+                            null,
+                            null
+                        )
                 }
                 cursor?.let {
                     if (it.count == 0) return
                     //первый столбец первой строки данных -
                     // это имя нашего подозреваемого
                     it.moveToFirst()
-                    val suspect = it.getStringOrNull(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-                    crime.suspect = suspect ?: ""
-                    crimeDetailViewModel.saveCrime(crime)
-                    suspectButton.text = suspect
+                    try {
+                        val suspect =
+                            it.getString(it.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                                ?: ""
+                        crime.suspect = suspect
+                        crimeDetailViewModel.saveCrime(crime)
+                        suspectButton.text = suspect
 
-                    val suspectPhone = it.getStringOrNull(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                    callSuspect.text = suspectPhone ?: ""
+                        val suspectPhone =
+                            it.getString(it.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                                ?: ""
+                        crime.suspectPhone = suspectPhone
+                        crimeDetailViewModel.saveCrime(crime)
+                        callSuspect.text = suspectPhone
+
+                    } catch (ex: Exception) {
+
+                    }
                 }
 
+
+            }
+
+            requestCode == REQUEST_PHONE && data != null -> {
+
+                val contactUri: Uri = data.data ?: return
+
+                val queryFields = ContactsContract.CommonDataKinds.Phone._ID
+
+                val cursor =
+                    requireActivity().contentResolver
+                        .query(contactUri, null, queryFields, null, null)
+
+                cursor.use {
+                    if (it?.count == 0) return
+
+                    it?.moveToFirst()
+
+                    try {
+                        val number =
+                            it?.getString(it.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER))
+                                ?: ""
+
+                        val dialNumber = Intent(Intent.ACTION_DIAL)
+                        dialNumber.data = Uri.parse("tel:$number")
+                        startActivity(dialNumber)
+                    } catch (ex: Exception) {
+
+                    }
+
+                }
             }
         }
     }

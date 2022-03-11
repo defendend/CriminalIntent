@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks {
             .commit()
     }
 
-    private fun checkPermission() {
+    private fun checkPermission(){
         if (ActivityCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.READ_CONTACTS
