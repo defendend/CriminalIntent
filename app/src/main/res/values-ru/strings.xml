@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CriminalIntent</string>
+    <string name="crime_title_hint">Введите преступление, кратко</string>
+    <string name="crime_title_label">Преступление</string>
+    <string name="crime_details_label">Детали</string>
+    <string name="crime_solved_label">Решено</string>
+    <string name="crime_time_button">Указать время</string>
+    <string name="crime_photo">Фото</string>
+    <string name="close_photo">закрыть</string>
+
+
+    <!-- item -->
+    <string name="date_format">EEEE , dd MMMM, yyyy</string>
+    <string name="item_title">Название</string>
+    <string name="item_date">Дата</string>
+    <string name="item_police_button">Вызвать полицию</string>
+    <string name="new_crime">Добавить</string>
+    <string name="crime_suspect_text">Выбрать подозреваемого</string>
+    <string name="crime_report_text">Отправить репорт</string>
+    <string name="crime_report">"%1$s!         Преступление было совершено %2$s. %3$s, %4$s     "</string>
+    <string name="crime_report_solved">Случай решен</string>
+    <string name="crime_report_unsolved">Случай не решен</string>
+    <string name="crime_report_no_suspect">подозреваемого нет</string>
+    <string name="crime_report_suspect">подозреваемый - %s</string>
+    <string name="crime_report_subject">CriminalIntent Crime Report</string>
+    <string name="send_report">Отправить репорт о перступлении через</string>
+    <string name="call_suspect">Позвонить подозреваемому</string>
+
+    <string name="crime_photo_button_description">Создать фото места преступления</string>
+    <string name="crime_photo_no_image_description">Фото приступления (не установлено)</string>
+    <string name="crime_photo_image_description">Фото преступления (установлено)</string>
+</resources>

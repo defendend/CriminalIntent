@@ -9,9 +9,9 @@ import java.util.*
 
 private const val ARG_DATE_TO_TIME = "time"
 
-class TimePickedFragment : DialogFragment() {
+class TimePickerFragment : DialogFragment() {
 
-    interface Callback{
+    interface Callbacks{
         fun onTimeSelected(date: Date)
     }
 
@@ -24,7 +24,7 @@ class TimePickedFragment : DialogFragment() {
                 resultDate.hours = hour
                 resultDate.minutes = minutes
                 targetFragment?.let { fragment ->
-                    (fragment as DatePickerFragment.Callbacks).onDateSelected(resultDate)
+                    (fragment as Callbacks).onTimeSelected(resultDate)
                 }
             }
 
@@ -45,11 +45,11 @@ class TimePickedFragment : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(date: Date) : TimePickedFragment{
+        fun newInstance(date: Date) : TimePickerFragment{
             val args = Bundle().apply {
                 putSerializable(ARG_DATE_TO_TIME,date)
             }
-            return TimePickedFragment().apply {
+            return TimePickerFragment().apply {
                 arguments = args
             }
         }

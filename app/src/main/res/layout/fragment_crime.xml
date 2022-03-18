@@ -33,13 +33,34 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="@dimen/normal_space"/>
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/crimeImageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerInside"
+        android:cropToPadding="true"
+        android:contentDescription="@string/crime_photo_no_image_description"
+        android:background="@color/darker_gray"
+        app:layout_constraintStart_toEndOf="@id/startLine"
+        app:layout_constraintTop_toBottomOf="@id/topLine"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/crimeImageButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_menu_camera"
+        android:contentDescription="@string/crime_photo_button_description"
+        app:layout_constraintStart_toEndOf="@id/startLine"
+        app:layout_constraintEnd_toEndOf="@id/crimeImageView"
+        app:layout_constraintTop_toBottomOf="@id/crimeImageView"/>
+
     <TextView
         style="?android:listSeparatorTextViewStyle"
         android:id="@+id/titleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/crime_title_label"
-        app:layout_constraintStart_toEndOf="@id/startLine"
+        app:layout_constraintStart_toEndOf="@id/crimeImageView"
         app:layout_constraintEnd_toStartOf="@id/endLine"
         app:layout_constraintTop_toBottomOf="@id/topLine"/>
 
@@ -47,8 +68,9 @@
         android:id="@+id/crimeTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:hint="@string/crime_title_hint"
-        app:layout_constraintStart_toEndOf="@id/startLine"
+        app:layout_constraintStart_toEndOf="@id/crimeImageView"
         app:layout_constraintEnd_toStartOf="@id/endLine"
         app:layout_constraintTop_toBottomOf="@id/titleTextView"/>
 
@@ -60,7 +82,7 @@
         android:text="@string/crime_details_label"
         app:layout_constraintStart_toEndOf="@id/startLine"
         app:layout_constraintEnd_toStartOf="@id/endLine"
-        app:layout_constraintTop_toBottomOf="@id/crimeTitle"/>
+        app:layout_constraintTop_toBottomOf="@id/crimeImageButton"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/crimeDate"
@@ -84,6 +106,7 @@
         style="?android:listSeparatorTextViewStyle"
         android:id="@+id/crime_solved"
         android:layout_width="0dp"
+        android:minHeight="48dp"
         android:layout_height="wrap_content"
         android:text="@string/crime_solved_label"
         app:layout_constraintStart_toEndOf="@id/startLine"

@@ -113,7 +113,7 @@ class CrimeListFragment : Fragment() {
         fun bind(crime: Crime) {
             this.crime = crime
             titleTextView.text = this.crime.title
-            val dateFormat: DateFormat = SimpleDateFormat("EEEE , MMM dd, yyyy")
+            val dateFormat: DateFormat = SimpleDateFormat(getString(R.string.date_format))
             dateTextView.text = dateFormat.format(crime.date)
             solvedImageView.visibility = if (crime.isSolved) {
                 View.VISIBLE
